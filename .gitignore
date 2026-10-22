@@ -1,0 +1,13 @@
+.idea/
+.venv/
+__pycache__/
+*.pyc
+*.jou
+*.log
+*.str
+.Xil/
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
