@@ -1,4 +1,4 @@
-Drones emit sound when they are flying
-I propose a solution to track them down
+Dronai skleidzia akustines bangas
+As pasiulau ideja kaip tas bangas pagauti ir nurodyti drono pozicija danguje
 
-With minor adjustment, to software, the hardware is capable of detecting and tracking a lot of different things.
+Su papildomom modifikacijom, galima aptikti kitus garsus, (Artilerija ir t.t.)
