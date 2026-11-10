@@ -23,6 +23,9 @@
 module cic_decimator(
 
     input wire clk, // clockas 2.8224MHz eis i mikrofono CLK Pino
+    
+    input wire pdm_ce, // NAUJAS SIGNALAS: 2.78 MHz impulsas kuris ateina is clk_div_pdm.v modulio
+    
     input wire rst, // resetas
     input wire pdm_in, // 1-bito pdm signalas is mikrofono DAT Pino
     output reg signed [27:0] cic_out, //28 bitu isejimas
@@ -39,7 +42,7 @@ module cic_decimator(
             int2 <= 28'sd0;
             int3 <= 28'sd0;
         end
-        else begin
+        else if (pdm_ce) begin
             int1 <= int1 + din; // prasideda pdm signalo kaupimas, jie visi veikia lygegraciai ir kaupia iki 2 pakelta 28
             int2 <= int2 + int1;
             int3 <= int3 + int2;
@@ -48,16 +51,21 @@ module cic_decimator(
      
      //decimacija, dalinsim signala is 512 kad gautume naikvisto dazni 2.75KHz Fdiskretizacijos bus apie 5.5KHz
      reg [8:0] dec_cnt; //counteris 2 pakelta 9 yra lygu 511 reiksmiu 
-     wire dec_pulse = (dec_cnt == 9'd511); //Pulsas kuris suveiks kai counteris pasieks 511 skaiciu
+     wire dec_pulse = (dec_cnt == 9'd511) && pdm_ce; //Pulsas kuris suveiks kai counteris pasieks 511 skaiciu ir pdm_ce bus teigemas skaicius t.y. TRUE
+     
+     
+     
      
      always @(posedge clk) begin
         if (rst) begin //jeigu viena eilute tai nebutina rasyt begin end, bet taip yra geriau kiek suprantu
             dec_cnt <= 9'd0;
         end
-        else begin // tas pats ir cia begin end normaliai apibrezia ribas
+        else if (pdm_ce) begin // tas pats ir cia begin end normaliai apibrezia ribas
             dec_cnt <= dec_cnt + 9'd1; // kai registras overflowins 511 reiksmiu jis pats pataps 0
         end
      end
+     
+     
      
      //Comb filtras ir draugai
      
@@ -79,7 +87,7 @@ module cic_decimator(
         
         end
         else begin
-            cic_valid <= 1'b0; //Visa laika flagas off, nebent dec_pulse gauna signala tada cic_valid tampa jau vienetukas 1 True
+            cic_valid <= 1'b0; //Visa laika flagas off, nebent dec_pulse su pdm_ce gauna signala tada cic_valid tampa jau vienetukas 1 True
             
             if (dec_pulse) begin //suveikia kas 512 taktu apiberzta pagal decimacijos koda
                 
