@@ -67,5 +67,14 @@ module PL_Connector(
     );
     
     
+    mic_correlation u_mic_correlation (
+        
+        .clock_100m (clock_100m),
+        .pcm_signal_in (w_pcm_signal[0])
+        
+        
+    );
+    
+    
     
 endmodule
