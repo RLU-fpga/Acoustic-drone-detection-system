@@ -10,7 +10,7 @@ module cic_decimator(
     
     input wire reset,
     
-    output reg signed [31:0] cic_signal_out,
+    output reg signed [23:0] cic_signal_out,
     
     output reg cic_ready_flag 
 
@@ -42,29 +42,31 @@ module cic_decimator(
     
     reg signed [31:0] decimator_comb1, decimator_comb2; // Decimators -- Bit value needs to be calculated for higher optimization
     
-    reg signed [31:0] delayed_integrator3, delayed_decimator_comb1, delayed_decimator_comb2;
+    reg signed [31:0] delayed_integrator3, delayed_decimator_comb1, delayed_decimator_comb2; // Delayed values for decimation
     
     reg [9:0] counter; // R = 1024
     
-    wire signed [31:0] pdm_bipolar = pdm_data_in ? 32'sd1 : -32'sd1;
+    wire signed [31:0] pdm_bipolar = pdm_data_in ? 32'sd1 : -32'sd1; // Asign +1 or -1 value for integration
+   
+    wire signed [31:0] comb3_diff = decimator_comb2 - delayed_decimator_comb2; // Subtraction before cutting off LSB bits turning the signal into 16bit
     
     always @(posedge clock_100m) begin
     
     
         if (reset) begin
         
-            integrator1 <= 32'd0;
-            integrator2 <= 32'd0;
-            integrator3 <= 32'd0;
+            integrator1 <= 32'sd0;
+            integrator2 <= 32'sd0;
+            integrator3 <= 32'sd0;
             
-            decimator_comb1 <= 32'd0;
-            decimator_comb2 <= 32'd0;
+            decimator_comb1 <= 32'sd0;
+            decimator_comb2 <= 32'sd0;
             
             delayed_integrator3 <= 32'sd0;
             delayed_decimator_comb1 <= 32'sd0;
             delayed_decimator_comb2 <= 32'sd0;
             
-            cic_signal_out <= 32'd0;
+            cic_signal_out <= 24'sd0;
             cic_ready_flag <= 1'b0;
             
             counter <= 10'd0;
@@ -78,6 +80,7 @@ module cic_decimator(
             cic_ready_flag <= 1'b0;        
         
             if (pdm_read_flag) begin
+
                 integrator1 <= integrator1 + pdm_bipolar;
                 integrator2 <= integrator2 + integrator1;
                 integrator3 <= integrator3 + integrator2;
@@ -99,7 +102,7 @@ module cic_decimator(
                 delayed_decimator_comb1 <= decimator_comb1;
             
             
-                cic_signal_out <= decimator_comb2 - delayed_decimator_comb2;
+                cic_signal_out <= comb3_diff[31:8]; // LSB bits are removed to get clean 24Bit CIC signal
                 delayed_decimator_comb2 <= decimator_comb2;
                 
                 cic_ready_flag <= 1'b1;
