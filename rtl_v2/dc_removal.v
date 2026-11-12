@@ -15,7 +15,7 @@ module dc_removal(
     
     // Real time dc removal module
     // The DC offset is unknown, and has to be removed, before correlation and other steps
-    // basic formule for high pass filter
+    // basic formula for high pass filter
     
     // y[n] = x[n] - x[n-1] + R * y[n-1]
     
@@ -26,7 +26,13 @@ module dc_removal(
     // F_cutoff = (F_samplerate * (1-R)) / 2* pi
     // F_cutoff = F_samplerate / (2 * pi * 2 ^ k)
     
-    // F_cutoff = 2714 / (2 * pi * 2 ^ 8) = 1.7Hz; -3db @ 1.7Hz
+    // F_cutoff = 2714 / (2 * pi * 2 ^ 3) = 54Hz; -3db @ 54Hz
+    // Higher F_cutoff filters some ambient noise out 
+    // k = 1; Fc = 216Hz
+    // k = 2; Fc = 108Hz
+    // k = 3; Fc = 54Hz
+    
+    // F_drone = +-300Hz
     
     
     
@@ -34,7 +40,7 @@ module dc_removal(
     reg signed [23:0] delayed_cic_signal_in;
     reg signed [23:0] delayed_dc_removed_out; 
     
-    wire signed [23:0] dc_removed = cic_signal_in - delayed_cic_signal_in + delayed_dc_removed_out - (delayed_dc_removed_out >>> 8);
+    wire signed [23:0] dc_removed = cic_signal_in - delayed_cic_signal_in + delayed_dc_removed_out - (delayed_dc_removed_out >>> 3);
     
     
     always @(posedge clock_100m) begin
