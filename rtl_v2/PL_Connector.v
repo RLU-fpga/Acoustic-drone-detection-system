@@ -68,6 +68,7 @@ module PL_Connector(
     
     );
     
+    // Link between PL_connector and tdoa_mic_correlation
     
     mic_correlation u_mic_correlation (
         
@@ -80,6 +81,14 @@ module PL_Connector(
     );
     
     
+    // Link between PL_connector and tdoa_correlator
+    
+    tdoa_correlator u_tdoa_correlator (
+    
+        .clock_100m (clock_100m),
+        .reset (reset)
+    
+    );
     
     
     
