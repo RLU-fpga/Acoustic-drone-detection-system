@@ -68,7 +68,7 @@ module PL_Connector(
     
     );
     
-    // Link between PL_connector and tdoa_mic_correlation
+    // Link between PL_connector and tdoa_mic_correlatio
     
     mic_correlation u_mic_correlation (
         
