@@ -14,7 +14,7 @@ module PL_Connector(
     
     
     wire w_pdm_read_flag;
-    wire [4:0] w_pcm_ready_flag;
+    wire w_pcm_ready_flag [0:4];
     
     wire signed [15:0] w_pcm_signal [0:4];
     
@@ -73,9 +73,9 @@ module PL_Connector(
     mic_correlation u_mic_correlation (
         
         .clock_100m (clock_100m),
-        .pcm_signal_in (w_pcm_signal[0]),
+        .pcm_signal_in0 (w_pcm_signal[0]),
         .reset (reset),
-        .pcm_ready_flag (w_pcm_ready_flag[0]),
+        .pcm_ready_flag0 (w_pcm_ready_flag[0]),
         .drone_detected_flag (w_drone_detected_flag)
         
     );

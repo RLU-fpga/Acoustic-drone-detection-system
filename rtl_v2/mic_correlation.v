@@ -6,11 +6,14 @@ module mic_correlation(
     input wire clock_100m,
     input wire reset,
     
-    input wire signed [15:0] pcm_signal_in,
+    input wire signed [15:0] pcm_signal_in0,
     
-    input wire pcm_ready_flag,
+    input wire pcm_ready_flag0,
     
-    output reg drone_detected_flag
+    output reg drone_detected_flag,
+    
+    output wire signed [15:0] microphone0_delayed_out 
+    
     
     
     
@@ -36,30 +39,21 @@ module mic_correlation(
     
     // Later depending on the phase difference between memory0 and memory8, real drone signal could be determined for better cross corelation
     
-    
     integer k; 
     
     reg [7:0] counter; //Sample will be taken for around 0.1 secconds; 0.1s / 368us = 271 cycles
     
-    reg signed [15:0] memory [0:8]; // Signal Memory 9 steps for auto correlation
+    reg signed [15:0] memory0 [0:8]; // Signal Memory 9 steps for auto correlation
     
     reg signed [39:0] accumulator_0, accumulator_8; // Accumulators for auto correlation
+    
+    assign microphone0_delayed_out = memory0[4];
     
     always @(posedge clock_100m) begin
     
         if (reset) begin
         
             counter <= 8'd0;
-            
-            memory[0] <= 16'sd0;
-            memory[1] <= 16'sd0;
-            memory[2] <= 16'sd0;
-            memory[3] <= 16'sd0;
-            memory[4] <= 16'sd0;
-            memory[5] <= 16'sd0;
-            memory[6] <= 16'sd0;
-            memory[7] <= 16'sd0;
-            memory[8] <= 16'sd0;
             
             accumulator_0 <= 40'd0;
             accumulator_8 <= 40'd0;
@@ -69,16 +63,16 @@ module mic_correlation(
         
         else begin
         
-            if (pcm_ready_flag) begin
+            if (pcm_ready_flag0) begin
             
-                memory[0] <= pcm_signal_in;
+                memory0[0] <= pcm_signal_in0;
                 
                 for(k = 1; k <= 8; k = k + 1)
-                    memory[k] <= memory[k-1];
+                    memory0[k] <= memory0[k-1];
                 
                 
-                accumulator_0 <= accumulator_0 + (pcm_signal_in * pcm_signal_in);
-                accumulator_8 <= accumulator_8 + (pcm_signal_in * memory[8]);
+                accumulator_0 <= accumulator_0 + (pcm_signal_in0 * pcm_signal_in0);
+                accumulator_8 <= accumulator_8 + (pcm_signal_in0 * memory0[8]);
                 
                 counter <= 8'd1 + counter;
                 
