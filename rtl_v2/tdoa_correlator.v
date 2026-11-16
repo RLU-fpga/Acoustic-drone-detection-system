@@ -2,10 +2,34 @@
 
 module tdoa_correlator(
 
+    input wire clock_100m,
+    input wire reset
+
 
 
 
     );
+    
+    
+    
+    
+    always @(posedge clock_100m) begin
+    
+        if (reset) begin
+        
+            
+        
+        end
+        else begin
+        
+            
+        
+        end
+    
+    
+    
+    
+    end
     
     
     // There will be alot of mem channels doing multiplication
