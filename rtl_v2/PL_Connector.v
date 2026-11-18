@@ -10,12 +10,17 @@ module PL_Connector(
     
     output wire pdm_clock,
     
-    
+    // Outputs into AXI-LITE BUS
     output wire drone_detected_flag,
     output wire [3:0] best_id1,
     output wire [3:0] best_id2,
     output wire [3:0] best_id3,
-    output wire [3:0] best_id4
+    output wire [3:0] best_id4,
+    
+    output wire best_id_flag1,
+    output wire best_id_flag2,
+    output wire best_id_flag3,
+    output wire best_id_flag4
     
     );
     
@@ -29,16 +34,20 @@ module PL_Connector(
     
     wire signed [15:0] w_memory0;
     
-    wire [3:0] w_best_id [1:4]; 
+    wire [3:0] w_best_id [1:4];
+    wire w_best_id_flag [1:4]; 
     
-    assign drone_detected_flag = w_drone_detected_flag;
     assign best_id1 = w_best_id[1];
     assign best_id2 = w_best_id[2];
     assign best_id3 = w_best_id[3];
     assign best_id4 = w_best_id[4];
     
+    assign best_id_flag1 = w_best_id_flag[1];
+    assign best_id_flag2 = w_best_id_flag[2];
+    assign best_id_flag3 = w_best_id_flag[3];
+    assign best_id_flag4 = w_best_id_flag[4];
     
-    
+    assign drone_detected_flag = w_drone_detected_flag;
     
     
     
@@ -112,7 +121,8 @@ module PL_Connector(
         
             .memory0 (w_memory0),
             .drone_detected_flag (w_drone_detected_flag),
-            .best_id (w_best_id[z])
+            .best_id (w_best_id[z]),
+            .best_id_flag (w_best_id_flag[z])
     
         );
         end

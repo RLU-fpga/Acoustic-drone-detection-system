@@ -7,28 +7,33 @@ module tdoa_correlator(
     input wire pcm_ready_flag,
 
     input wire drone_detected_flag,
-    input wire signed [15:0] memory0,
+    input wire signed [15:0] memory0, // Memory from mic_correlation file for phase correlation
     
-    input wire signed [15:0] pcm_signal_in,
+    input wire signed [15:0] pcm_signal_in, // Pcm signal from different microphones
     
-    output reg [3:0] best_id
+    output reg [3:0] best_id, // Best memory ID from calculations, used for calculations.
+    output reg best_id_flag
     
     
     );
     
-        // There will be alot of mem channels doing multiplication
-    // with DSP48E1 blocks, which zynq7020 has 220 off.
+    // Tdoa_correlator works by comparing memory0 (center microphone) with microphones on each side
+    // It determines the best value by multiplying memory0 with pcm_signal_memory
+    // Which one gets the highest score, gets sent to best_id into PS through AXI_lite bus
     
-    // acc0 <= acc0 + (mic0mem[8] * mic1mem[0]);
+    // accumulator[i] <= accumulator[i] + (memory0 * memory[i]) 
+    // Satisfies DSP48E1 slice configuration 48 bit accumulator and 25 bit * 18 bit memory multiplication
     
-    // acc8 <= acc8 + (mic0mem[8] * mic1mem[8]);
+    // After multiplying there is (1 / 2715hz) / (1 / 100Mhz) = 36832 free cycles
     
-    // acc16 <= acc16 + (mic0mem[8] * mic1mem[16]);
+    // In those free Cycles comparing starts comparing bits and in 80ns it finishes
+    // Raises the best_id_flag to True so the PS knows that the best_id was found
     
-    // They will count up for about 256 cycles, and will be compared which one was the highest
+    // The memory is constantly refreshed with the newest values
+    // Accumulators are kept at 0
     
-    // The winning numbers from mic0 - mic1; mic0 - mic2; mic0 - mic3; mic0 - mic4;
-    // Will be sent to PS through AXI lite probably and calculated internally by the arm cores on metal.
+    // When drone_detected_flag returns 1 then calculations begin
+    
     
     
     reg signed [15:0] memory [0:8];
@@ -62,6 +67,7 @@ module tdoa_correlator(
                 comparing <= 1'b0;
                 comporator_id <= 4'd0;
                 counter <= 8'd0;
+                best_id_flag <= 1'b0;
                 
                 
         
@@ -86,6 +92,7 @@ module tdoa_correlator(
                 
                     
                     comparing <= 1'b0;
+                    best_id_flag <= 1'b1;
                     
                                     
                 end
@@ -133,6 +140,7 @@ module tdoa_correlator(
                         best_value <= accumulator[0];
                         best_id <= 8'd0;
                         accumulator[0] <= 40'sd0;
+                        best_id_flag <= 1'b0;
                     
                     end
                     
