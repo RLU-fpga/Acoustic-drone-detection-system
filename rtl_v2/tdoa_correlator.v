@@ -53,7 +53,7 @@ module tdoa_correlator(
     
     always @(posedge clock_100m) begin
     
-        if (reset) begin
+        if (reset) begin // Resets Values to zero
         
             for(z = 0; z <= 8; z = z + 1) begin
             
@@ -74,7 +74,7 @@ module tdoa_correlator(
         end
         else begin
         
-            if (comparing) begin
+            if (comparing) begin // Compares accumulator values, and finds Best_ID
             
                 comporator_id <= comporator_id + 8'd1;
                 
@@ -99,9 +99,9 @@ module tdoa_correlator(
             
             end
             
-            if (pcm_ready_flag && (drone_detected_flag == 1'b0)) begin
+            if (pcm_ready_flag && (drone_detected_flag == 1'b0)) begin 
                 
-                    for (z = 0; z <= 8; z = z + 1) begin
+                    for (z = 0; z <= 8; z = z + 1) begin // Drones not detected accumulator and counter 0
                         
                         accumulator[z] <= 40'sd0;
                         
@@ -113,7 +113,7 @@ module tdoa_correlator(
         
             if (pcm_ready_flag) begin
             
-                memory[0] <= pcm_signal_in;
+                memory[0] <= pcm_signal_in; // Constantly updating memory
                 
                 for (k = 1; k <= 8; k = k + 1) begin
                 
@@ -121,7 +121,7 @@ module tdoa_correlator(
                 
                 end
                 
-                if (drone_detected_flag) begin
+                if (drone_detected_flag) begin // When drone detected then calculations happen
                 
                     counter <= counter + 8'd1;
                     
@@ -131,7 +131,7 @@ module tdoa_correlator(
                     
                     end
                 
-                    if (counter == 255) begin
+                    if (counter == 255) begin // Once counter reaches maximum value it gives flag for comporator
                 
                         comparing <= 1'b1;
                         comporator_id <= 8'd1;
