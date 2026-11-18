@@ -8,8 +8,15 @@ module PL_Connector(
     input wire reset, // Reset pin
     input wire [4:0] pdm_data_in,
     
-    output wire pdm_clock
-
+    output wire pdm_clock,
+    
+    
+    output wire drone_detected_flag,
+    output wire [3:0] best_id1,
+    output wire [3:0] best_id2,
+    output wire [3:0] best_id3,
+    output wire [3:0] best_id4
+    
     );
     
     
@@ -20,9 +27,15 @@ module PL_Connector(
     
     wire w_drone_detected_flag;
     
+    wire signed [15:0] w_memory0;
     
+    wire [3:0] w_best_id [1:4]; 
     
-    
+    assign drone_detected_flag = w_drone_detected_flag;
+    assign best_id1 = w_best_id[1];
+    assign best_id2 = w_best_id[2];
+    assign best_id3 = w_best_id[3];
+    assign best_id4 = w_best_id[4];
     
     
     
@@ -76,20 +89,34 @@ module PL_Connector(
         .pcm_signal_in0 (w_pcm_signal[0]),
         .reset (reset),
         .pcm_ready_flag0 (w_pcm_ready_flag[0]),
-        .drone_detected_flag (w_drone_detected_flag)
+        .drone_detected_flag (w_drone_detected_flag),
+        .microphone0_delayed_out (w_memory0)
         
     );
     
     
     // Link between PL_connector and tdoa_correlator
     
-    tdoa_correlator u_tdoa_correlator (
+    genvar z;
     
-        .clock_100m (clock_100m),
-        .reset (reset)
+    generate
+        for (z = 1; z < 5; z = z +1) begin : tdoa_best
     
-    );
+        tdoa_correlator u_tdoa_correlator (
     
+            .clock_100m (clock_100m),
+            .reset (reset),
+        
+            .pcm_signal_in (w_pcm_signal[z]),
+            .pcm_ready_flag (w_pcm_ready_flag[z]),
+        
+            .memory0 (w_memory0),
+            .drone_detected_flag (w_drone_detected_flag),
+            .best_id (w_best_id[z])
+    
+        );
+        end
+    endgenerate
     
     
 endmodule
