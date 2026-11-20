@@ -26,7 +26,16 @@ module tb_cic_decimator();
     reg pdm_mem [0:39999];
     integer i, out_file;
     
-    initial begin
+    // Python script "generate_pdm.py" generates a Golden Signal called "pdm_input.txt"
+    
+    // Then tb_cic_decimator.v is started, it takes the signal the .py generated and applies cic decimation
+    
+    // Once it finishes it creates a diagram in verilog, and a new file called "cic_output.txt"
+    
+    // "cic_output.txt" is ran through python script "check_cic.py" to double check if the "cic_decimator.v"
+    // Did it correctly
+    
+    initial begin 
     
         $readmemb("/home/rytis/Documents/GitHub/Acoustic-drone-detection-system/scripts/pdm_input.txt", pdm_mem);
         out_file = $fopen("/home/rytis/Documents/GitHub/Acoustic-drone-detection-system/scripts/cic_output.txt", "w");
