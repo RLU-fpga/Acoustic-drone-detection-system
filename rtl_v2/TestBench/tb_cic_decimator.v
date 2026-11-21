@@ -37,8 +37,8 @@ module tb_cic_decimator();
     
     initial begin 
     
-        $readmemb("/home/rytis/Documents/GitHub/Acoustic-drone-detection-system/scripts/pdm_input.txt", pdm_mem);
-        out_file = $fopen("/home/rytis/Documents/GitHub/Acoustic-drone-detection-system/scripts/cic_output.txt", "w");
+        $readmemb("/home/rytis/Documents/GitHub/Acoustic-drone-detection-system/scripts/DataFiles/pdm_input.txt", pdm_mem);
+        out_file = $fopen("/home/rytis/Documents/GitHub/Acoustic-drone-detection-system/scripts/DataFiles/cic_output.txt", "w");
         
         reset = 1;
         #100;

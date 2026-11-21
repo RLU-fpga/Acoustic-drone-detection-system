@@ -31,8 +31,8 @@ module tb_pdm_to_pcm();
     
     initial begin
     
-        $readmemb("/home/rytis/Documents/GitHub/Acoustic-drone-detection-system/scripts/pdm_to_pcm_bits.txt", pdm_mem);
-        out_file = $fopen("/home/rytis/Documents/GitHub/Acoustic-drone-detection-system/scripts/pdm_to_pcm_output.txt", "w");
+        $readmemb("/home/rytis/Documents/GitHub/Acoustic-drone-detection-system/scripts/DataFiles/pdm_to_pcm_bits.txt", pdm_mem);
+        out_file = $fopen("/home/rytis/Documents/GitHub/Acoustic-drone-detection-system/scripts/DataFiles/pdm_to_pcm_output.txt", "w");
         
         reset = 1;
         #100;
@@ -54,7 +54,7 @@ module tb_pdm_to_pcm();
         
         $fclose (out_file);
         #100;
-       $finish;
+        $finish;
         
     
     end
