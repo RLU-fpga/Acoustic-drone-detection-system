@@ -4,7 +4,7 @@ import matplotlib as mpl
 
 data = np.loadtxt("cic_output.txt")[3:]
 
-f_out = (100e6 / 36.0) / 1024.0 # 27.12 Hz
+f_out = (100e6 / 36.0) / 1024.0 # 2712 Hz
 N = len(data)
 
 t = np.arange(N) / f_out
