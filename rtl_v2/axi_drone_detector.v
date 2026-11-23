@@ -4,6 +4,8 @@ module axi_drone_detector(
     
     // External pins for microphones
     input wire [4:0] pdm_data_in,
+    
+    (* X_INTERFACE_IGNORE = "true" *)
     output wire pdm_clock,
     
     // AXI4-LITE clock and active low reset

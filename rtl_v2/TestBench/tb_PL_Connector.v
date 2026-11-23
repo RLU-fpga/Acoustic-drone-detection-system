@@ -22,8 +22,7 @@ module tb_PL_Connector();
     
     always #5 clock_100m = ~clock_100m;
     
-    PL_Connector uut (
-    
+    PL_Connector uut (    
         .clock_100m (clock_100m),
         .reset (reset),
         .pdm_data_in (pdm_data_in),

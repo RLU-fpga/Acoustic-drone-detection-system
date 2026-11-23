@@ -1,0 +1,29 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"1.0",
+   "Default View_TopLeft":"-900,-1308",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:24.0 TLS
+#  -string -flagsOSRD
+preplace port DDR -pg 1 -lvl 5 -x 1380 -y -670 -defaultsOSRD
+preplace port FIXED_IO -pg 1 -lvl 5 -x 1380 -y -640 -defaultsOSRD
+preplace port port-id_pdm_clock_0 -pg 1 -lvl 0 -x -20 -y -600 -defaultsOSRD -left
+preplace portBus pdm_data_in_0 -pg 1 -lvl 0 -x -20 -y -630 -defaultsOSRD
+preplace inst processing_system7_0 -pg 1 -lvl 2 -x 510 -y -600 -defaultsOSRD
+preplace inst axi_drone_detector_0 -pg 1 -lvl 1 -x 170 -y -610 -defaultsOSRD
+preplace inst axi_smc -pg 1 -lvl 4 -x 1210 -y -550 -defaultsOSRD
+preplace inst rst_ps7_0_100M -pg 1 -lvl 3 -x 880 -y -450 -defaultsOSRD
+preplace netloc processing_system7_0_FCLK_CLK0 1 0 4 20 -510 320 -490 710 -550 NJ
+preplace netloc processing_system7_0_FCLK_RESET0_N 1 2 1 700 -550n
+preplace netloc rst_ps7_0_100M_peripheral_aresetn 1 0 4 30 -710 NJ -710 NJ -710 1060
+preplace netloc pdm_data_in_0_1 1 0 1 0 -630n
+preplace netloc axi_drone_detector_0_pdm_clock 1 0 2 0 -520 310J
+preplace netloc processing_system7_0_DDR 1 2 3 NJ -650 N -650 1360
+preplace netloc processing_system7_0_FIXED_IO 1 2 3 NJ -630 1070 -640 N
+preplace netloc processing_system7_0_M_AXI_GP0 1 2 2 NJ -590 1050J
+preplace netloc axi_smc_M00_AXI 1 0 5 10 -720 NJ -720 NJ -720 NJ -720 1350
+levelinfo -pg 1 -20 170 510 880 1210 1380
+pagesize -pg 1 -db -bbox -sgen -200 -730 1520 200
+"
+}
+
