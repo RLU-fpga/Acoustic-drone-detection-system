@@ -10,7 +10,7 @@ module PL_Connector(
     
     output wire pdm_clock,
     
-    // Outputs into AXI-LITE BUS
+    // Outputs into AXI4-LITE BUS
     output wire drone_detected_flag,
     output wire [3:0] best_id1,
     output wire [3:0] best_id2,
