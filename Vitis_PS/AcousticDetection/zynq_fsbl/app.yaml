@@ -1,0 +1,4 @@
+domain_path: /home/rytis/Documents/GitHub/Acoustic-drone-detection-system/Vitis_PS/AcousticDetection/zynq_fsbl/zynq_fsbl_bsp
+app_src_dir: /opt/Xilinix/2026.1/Vitis/data/embeddedsw/lib/sw_apps/zynq_fsbl
+template: zynq_fsbl
+lang: c

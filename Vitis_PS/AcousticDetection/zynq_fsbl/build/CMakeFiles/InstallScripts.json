@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/rytis/Documents/GitHub/Acoustic-drone-detection-system/Vitis_PS/AcousticDetection/zynq_fsbl/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
